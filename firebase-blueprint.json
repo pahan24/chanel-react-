@@ -1,0 +1,109 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account information and coin balance",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "coins": { "type": "number" },
+        "referralCode": { "type": "string" },
+        "referredBy": { "type": "string" },
+        "lastDailyReward": { "type": "string", "format": "date-time" },
+        "isAdmin": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "coins"]
+    },
+    "Channel": {
+      "title": "WhatsApp Channel",
+      "description": "Information about a linked WhatsApp channel",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "url": { "type": "string" },
+        "name": { "type": "string" },
+        "followers": { "type": "number" },
+        "image": { "type": "string" },
+        "description": { "type": "string" },
+        "type": { "type": "string", "enum": ["channel", "post"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "url", "name"]
+    },
+    "Order": {
+      "title": "React Order",
+      "description": "An order for channel or post reactions",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "channelId": { "type": "string" },
+        "packageId": { "type": "string" },
+        "packageName": { "type": "string" },
+        "type": { "type": "string", "enum": ["subscription", "post"] },
+        "coinsPaid": { "type": "number" },
+        "durationDays": { "type": "number" },
+        "scheduleWindow": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "active", "completed", "expired", "cancelled"] },
+        "startDate": { "type": "string", "format": "date-time" },
+        "endDate": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "channelId", "coinsPaid", "status"]
+    },
+    "Transaction": {
+      "title": "Wallet Transaction",
+      "description": "Record of coin intake or spending",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "amount": { "type": "number" },
+        "type": { "type": "string", "enum": ["reward", "order", "refund", "referral", "signup_bonus"] },
+        "description": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "amount", "type"]
+    },
+    "Notification": {
+      "title": "User Notification",
+      "description": "Alerts for rewards, orders, and system updates",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string" },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "message"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles"
+    },
+    "/channels/{channelId}": {
+      "schema": "Channel",
+      "description": "Linked WhatsApp channels and posts"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "Reaction orders and subscriptions"
+    },
+    "/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "User wallet history"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "User-specific notifications"
+    }
+  }
+}
